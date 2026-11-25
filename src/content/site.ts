@@ -1,0 +1,418 @@
+/**
+ * Every word on the site lives here (no CMS). Edit this file to change copy.
+ */
+
+/** The pages in the sidebar. */
+export type SectionId = "overview" | "projects" | "services" | "about" | "contact";
+
+export type ProjectStatus = "building" | "shipped";
+
+export type ProjectGroupId = "products" | "client";
+
+
+export type Project = {
+  id: string;
+  name: string;
+  group: ProjectGroupId;
+  /** Short line under the card title. */
+  category: string;
+  /** Homepage screenshot in /public (16:10). Without one, the card shows generated line art. */
+  image?: string;
+  status: ProjectStatus;
+  description: string;
+  stack: readonly string[];
+  action: { label: "View"; href: string } | { label: "Inquire"; opens: SectionId };
+};
+
+export type Service = {
+  title: string;
+  description: string;
+  price: string;
+};
+
+export type ExternalLink = {
+  id: "github" | "linkedin" | "x" | "facebook" | "instagram" | "discord" | "whatsapp";
+  label: string;
+  href: string;
+};
+
+const projects: readonly Project[] = [
+  {
+    id: "three-ai",
+    name: "Three AI",
+    group: "products",
+    category: "Decision intelligence",
+    image: "/projects/three-ai.webp",
+    status: "building",
+    description:
+      "A decision intelligence engine for business finance. Analyzes company-specific data, synthesizes strategic options, and produces structured reasoning trails — giving founders and executives a system for high-stakes financial decisions.",
+    stack: ["FastAPI", "Next.js", "Supabase", "Python", "LLM routing", "Recursive Reasoning"],
+    action: { label: "View", href: "https://main-app-sigma-virid.vercel.app" },
+  },
+  {
+    id: "hombox",
+    name: "HomBox",
+    group: "products",
+    category: "E-commerce",
+    image: "/projects/hombox.webp",
+    status: "building",
+    description:
+      "Nigerian home appliance e-commerce platform with a premium UI. Built with Apple-style design principles for the Nigerian market — clean, fast, and optimized for mobile-first commerce.",
+    stack: ["Next.js", "Paystack", "Supabase", "TypeScript"],
+    action: { label: "View", href: "https://hom-box.vercel.app/" },
+  },
+  {
+    id: "founder-roast",
+    name: "Founder Roast",
+    group: "products",
+    category: "AI tool",
+    image: "/projects/founder-roast.webp",
+    status: "shipped",
+    description:
+      "Paste a startup's URL and AI scores the landing page on design, trust, positioning and revenue potential, then says exactly what to fix.",
+    stack: ["Next.js", "AI"],
+    action: { label: "View", href: "https://founder-roast.vercel.app" },
+  },
+  {
+    id: "ibe-pay",
+    name: "IBE Pay",
+    group: "products",
+    category: "Fintech",
+    image: "/projects/ibe-pay.webp",
+    status: "shipped",
+    description:
+      "Every Nigerian bank card in one smart wallet: tap to pay, spend past a single naira card's international limit, and earn cashback on every card.",
+    stack: ["Static site"],
+    action: { label: "View", href: "https://ibe-pay.vercel.app" },
+  },
+  {
+    id: "lancer",
+    name: "Lancer",
+    group: "products",
+    category: "Personal finance",
+    image: "/projects/lancer.webp",
+    status: "shipped",
+    description:
+      "Reads your bank alerts and asks what each one was for, so money in and money out make sense across every bank.",
+    stack: ["Static site"],
+    action: { label: "View", href: "https://lancer-site.vercel.app" },
+  },
+  {
+    id: "ledgerpilot",
+    name: "LedgerPilot",
+    group: "products",
+    category: "Tax assistant",
+    image: "/projects/ledgerpilot.webp",
+    status: "shipped",
+    description:
+      "A smart tax assistant for freelancers and creators: it watches your money, tracks business expenses automatically and helps you pay the right amount of tax.",
+    stack: ["Static site"],
+    action: { label: "View", href: "https://ledgerpilot-website-eight.vercel.app" },
+  },
+  {
+    id: "preve",
+    name: "Preve",
+    group: "products",
+    category: "AI content tool",
+    image: "/projects/preve.webp",
+    status: "shipped",
+    description:
+      "Turns everything you've ever posted into your next post: your best ideas resurfaced and remixed with AI in your voice.",
+    stack: ["Next.js", "AI"],
+    action: { label: "View", href: "https://preve-lac.vercel.app" },
+  },
+  {
+    id: "codarc",
+    name: "Codarc",
+    group: "products",
+    category: "Developer tool",
+    image: "/projects/codarc.webp",
+    status: "shipped",
+    description:
+      "A visual map of the codebase you already built: see the code you shipped and change it by pointing at it.",
+    stack: ["Next.js"],
+    action: { label: "View", href: "https://codarc-rho.vercel.app" },
+  },
+  {
+    id: "neva",
+    name: "Neva",
+    group: "products",
+    category: "Gadget marketplace",
+    image: "/projects/neva.webp",
+    status: "shipped",
+    description:
+      "Buy and sell gadgets in conversation: pick a @username, browse listings, message sellers and make offers.",
+    stack: ["Next.js"],
+    action: { label: "View", href: "https://neva-ebon.vercel.app" },
+  },
+  {
+    id: "trend-stack",
+    name: "Trend Stack",
+    group: "products",
+    category: "Tech news",
+    image: "/projects/trend-stack.webp",
+    status: "shipped",
+    description:
+      "Next-gen tech news and intelligence for builders.",
+    stack: ["Next.js"],
+    action: { label: "View", href: "https://trend-stack.vercel.app" },
+  },
+  {
+    id: "vizstats",
+    name: "VizStats",
+    group: "client",
+    category: "Studio website",
+    image: "/projects/vizstats.webp",
+    status: "shipped",
+    description:
+      "Website for VizStats, a data experience studio that turns complex, high-stakes research into digital products people can actually use.",
+    stack: ["Static site"],
+    action: { label: "View", href: "https://vizstats-orbit-preview-4qelzc3.vercel.app" },
+  },
+  {
+    id: "vizstats-mining",
+    name: "Asian Mining Giants in Africa",
+    group: "client",
+    category: "Data story",
+    image: "/projects/vizstats-mining.webp",
+    status: "shipped",
+    description:
+      "A long-form VizStats investigation into how 29 Chinese state-backed and hybrid enterprises came to dominate Africa's critical-minerals supply chain.",
+    stack: ["Next.js", "Data visualisation"],
+    action: { label: "View", href: "https://vizstats-product-page.vercel.app" },
+  },
+  {
+    id: "showtiva",
+    name: "ShowTiva",
+    group: "client",
+    category: "Family streaming",
+    image: "/projects/showtiva.webp",
+    status: "shipped",
+    description:
+      "Curated films and shows the whole family can watch together, with every title vetted before it's published.",
+    stack: ["Next.js"],
+    action: { label: "View", href: "https://showtiva-site-gamma.vercel.app" },
+  },
+  {
+    id: "hilton-clinics",
+    name: "Hilton Clinics",
+    group: "client",
+    category: "Healthcare website",
+    image: "/projects/hilton-clinics.webp",
+    status: "shipped",
+    description:
+      "Website for a 24-hour, specialist-led hospital in Port Harcourt, with services, appointment booking and a chat line to the front desk.",
+    stack: ["Next.js"],
+    action: { label: "View", href: "https://hilton-clinic.vercel.app" },
+  },
+  {
+    id: "boomtown",
+    name: "BoomTown",
+    group: "client",
+    category: "Restaurant website",
+    image: "/projects/boomtown.webp",
+    status: "shipped",
+    description:
+      "Mobile-first site for a Port Harcourt restaurant, lounge and coffee shop, with WhatsApp ordering, table reservations and an installable app.",
+    stack: ["Next.js", "PWA", "WhatsApp ordering"],
+    action: { label: "View", href: "https://boomtown-sigma.vercel.app" },
+  },
+  {
+    id: "racecraft-sim",
+    name: "Racecraft Sim",
+    group: "client",
+    category: "Venue website",
+    image: "/projects/racecraft-sim.webp",
+    status: "shipped",
+    description:
+      "Site for a premium sim racing venue in Peterborough: direct-drive rigs and real-world circuits for solo sessions, race nights, parties and corporate events.",
+    stack: ["Next.js"],
+    action: { label: "View", href: "https://game-site-nine-lime.vercel.app" },
+  },
+  {
+    id: "leonardo",
+    name: "Leonardo Spa Hotel",
+    group: "client",
+    category: "Hotel website",
+    image: "/projects/leonardo.webp",
+    status: "shipped",
+    description:
+      "Website for an urban sanctuary in Port Harcourt: 65 rooms and suites, a spa, a private city beach and fine dining, with direct booking.",
+    stack: ["Next.js"],
+    action: { label: "View", href: "https://leonardo-hotel.vercel.app" },
+  },
+  {
+    id: "braids-at-reens",
+    name: "Braids at Reen's",
+    group: "client",
+    category: "Salon website",
+    image: "/projects/braids-at-reens.webp",
+    status: "shipped",
+    description:
+      "Hair lounge site for knotless braids, cornrows, boho styles and nails in Port Harcourt, with salon and home service.",
+    stack: ["Static site"],
+    action: { label: "View", href: "https://braid-at-reens.vercel.app" },
+  },
+  {
+    id: "afunwa",
+    name: "Afunwa",
+    group: "client",
+    category: "Hair e-commerce",
+    image: "/projects/afunwa.webp",
+    status: "shipped",
+    description:
+      "Online hair store for lace fronts, bone straight, curls, braids and closures, picked, checked and delivered across Nigeria.",
+    stack: ["Next.js"],
+    action: { label: "View", href: "https://afunwa-hairline.vercel.app" },
+  },
+  {
+    id: "blessed-hairs",
+    name: "Blessed Hairs",
+    group: "client",
+    category: "Wig store",
+    image: "/projects/blessed-hairs.webp",
+    status: "shipped",
+    description:
+      "Store site for Blessed Hairs & Wig Empire: quality wigs at honest prices in Port Harcourt.",
+    stack: ["Next.js"],
+    action: { label: "View", href: "https://wigstore-ten.vercel.app" },
+  },
+  {
+    id: "elegance-stitches",
+    name: "Elegance Stitches",
+    group: "client",
+    category: "Tailoring website",
+    image: "/projects/elegance-stitches.webp",
+    status: "shipped",
+    description:
+      "A premium tailoring studio's site: bespoke garments, alterations, bridal wear and polished finishing, with fitting bookings.",
+    stack: ["Next.js"],
+    action: { label: "View", href: "https://elegant-threads-one.vercel.app" },
+  },
+  {
+    id: "artisans-hub",
+    name: "Artisans Hub",
+    group: "client",
+    category: "Food ordering",
+    image: "/projects/artisans-hub.webp",
+    status: "shipped",
+    description:
+      "Student-friendly meals, small chops and event catering for FUT Minna, with delivery and pickup.",
+    stack: ["Next.js"],
+    action: { label: "View", href: "https://artisans-hub-topaz.vercel.app" },
+  },
+  {
+    id: "ai-integrations",
+    name: "Custom AI Integrations",
+    group: "client",
+    category: "AI engineering",
+    status: "shipped",
+    description:
+      "End-to-end AI feature development for clients — RAG pipelines, custom LLM workflows, intelligent chat interfaces, and agent architectures. From scoping to production deployment.",
+    stack: ["Python", "OpenAI", "Anthropic", "FastAPI", "Vector DBs"],
+    action: { label: "Inquire", opens: "contact" },
+  },
+];
+
+
+const services: readonly Service[] = [
+  {
+    title: "Full-Stack Development",
+    description:
+      "End-to-end web applications. Backend APIs, databases, auth, frontend — all of it. I own the full stack so you don't need to manage three different contractors.",
+    price: "From $800 / project",
+  },
+  {
+    title: "AI Integration",
+    description:
+      "Add intelligence to your existing product. LLM-powered features, chatbots, document analysis, automated workflows. Production-ready, not toy demos.",
+    price: "From $500 / integration",
+  },
+  {
+    title: "MVP Development",
+    description:
+      "Go from idea to working product in weeks, not months. I've built two products solo — I know how to cut scope intelligently and ship fast without cutting quality.",
+    price: "From $1,200 / MVP",
+  },
+  {
+    title: "Technical Consulting",
+    description:
+      "Architecture review, tech stack decisions, code audits, and system design. Hourly or retainer. Good for non-technical founders who need a trusted technical voice.",
+    price: "$60 / hour",
+  },
+];
+
+const links: readonly ExternalLink[] = [
+  { id: "github", label: "GitHub", href: "https://github.com/IBE-GIDEON" },
+  {
+    id: "linkedin",
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/gideon-chinemerem-3037a43a3/",
+  },
+  { id: "x", label: "Twitter / X", href: "https://x.com/Tech_zealot" },
+  // Paste your links here; each one appears on the site once it has a link.
+  // WhatsApp: "https://wa.me/234XXXXXXXXXX" (number with country code, no +).
+  { id: "facebook", label: "Facebook", href: "" },
+  { id: "instagram", label: "Instagram", href: "" },
+  { id: "discord", label: "Discord", href: "" },
+  { id: "whatsapp", label: "WhatsApp", href: "" },
+];
+
+/** Socials that have a link — the ones the site actually shows. */
+export const activeLinks = links.filter((l) => l.href !== "");
+
+export const site = {
+  name: "Gideon Ibe",
+  alias: "Gideon Da Critic",
+  /** Your photo: put the file in /public (e.g. public/me.jpg) and set "/me.jpg". */
+  photo: null as string | null,
+  role: "Full-stack engineer & AI builder",
+  pitch:
+    "I design and ship production systems — from intelligent backends to premium interfaces. Based in Port Harcourt, working globally.",
+  location: "Port Harcourt, Nigeria",
+  timeZone: "Africa/Lagos",
+  availability: "Available for freelance work",
+  stats: [
+    { value: "6+", label: "yrs self-taught" },
+    { value: "2", label: "products in market" },
+    { value: "19", label: "years old" },
+  ],
+  about: {
+    /**
+     * The spec rows in the About window, like "About This Mac".
+     * Edit freely: each line is a label and a short value.
+     */
+    facts: [
+      { label: "Based in", value: "Port Harcourt, Nigeria · working globally" },
+      { label: "Experience", value: "6+ years building software" },
+      { label: "Education", value: "Self-taught since my early teens" },
+      { label: "Focus", value: "Full-stack development, AI product architecture" },
+      { label: "Founder of", value: "Three AI and HomBox" },
+      { label: "Works with", value: "Founders, startups and businesses" },
+    ],
+    headline: "I build things that actually work.",
+    paragraphs: [
+      "Self-taught since my early teens. No degree, no bootcamp — just years of building, breaking, and shipping. I specialize in full-stack development, AI-powered product architecture, and turning complex technical problems into clean, usable software.",
+      "Right now I'm the solo founder of Three AI — a decision intelligence engine for business finance — and HomBox, a Nigerian home appliance e-commerce platform. Both built from scratch, alone.",
+      "I work with founders, startups, and businesses who need someone who can own the entire technical stack — not just one layer of it.",
+    ],
+  },
+  stack: [
+    { group: "Backend", items: ["Python", "FastAPI", "Node.js", "REST APIs", "Supabase", "PostgreSQL"] },
+    { group: "Frontend", items: ["Next.js", "React", "TypeScript", "Tailwind", "Framer Motion"] },
+    { group: "AI & LLMs", items: ["OpenAI API", "Anthropic", "Prompt eng.", "RAG pipelines", "Agents"] },
+    {
+      group: "Product & Design",
+      items: ["Figma", "Design systems", "UI/UX", "Glassmorphism", "Paystack"],
+    },
+  ],
+  projects,
+  services,
+  contact: {
+    headline: "Let's build something.",
+    body: "Open to freelance projects, technical consulting, and long-term collaborations.",
+    responseTime: "Response within 24 hours",
+    email: "shytersnicks@gmail.com",
+  },
+  links,
+} as const;

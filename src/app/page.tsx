@@ -1,3 +1,5 @@
+import { Experience } from "@/Experience";
+
 export default function Home() {
-  return <main className="h-dvh w-full" />;
+  return <Experience />;
 }
