@@ -31,7 +31,7 @@ export type Service = {
 };
 
 export type ExternalLink = {
-  id: "github" | "linkedin" | "x" | "facebook" | "instagram" | "discord" | "whatsapp";
+  id: "github" | "linkedin" | "x" | "facebook" | "instagram" | "whatsapp";
   label: string;
   href: string;
 };
@@ -354,7 +354,6 @@ const links: readonly ExternalLink[] = [
   // WhatsApp: "https://wa.me/234XXXXXXXXXX" (number with country code, no +).
   { id: "facebook", label: "Facebook", href: "https://www.facebook.com/profile.php?id=61595181771699" },
   { id: "instagram", label: "Instagram", href: "https://www.instagram.com/codarc_ceo/" },
-  { id: "discord", label: "Discord", href: "" },
   { id: "whatsapp", label: "WhatsApp", href: "https://wa.me/2349078390089" }, // +234 907 839 0089
 ];
 

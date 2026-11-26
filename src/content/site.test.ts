@@ -32,7 +32,7 @@ test("projects and their actions", () => {
 
 test("contact and links", () => {
   expect(site.contact.email).toBe("shytersnicks@gmail.com");
-  expect(site.links.map((l) => l.id)).toEqual(["github", "linkedin", "x", "facebook", "instagram", "discord", "whatsapp"]);
+  expect(site.links.map((l) => l.id)).toEqual(["github", "linkedin", "x", "facebook", "instagram", "whatsapp"]);
   // Only socials with a link are shown; the rest wait for Gideon's links.
   expect(activeLinks.map((l) => l.href)).toEqual([
     "https://github.com/IBE-GIDEON",
