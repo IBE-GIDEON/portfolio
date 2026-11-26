@@ -352,10 +352,10 @@ const links: readonly ExternalLink[] = [
   { id: "x", label: "Twitter / X", href: "https://x.com/Tech_zealot" },
   // Paste your links here; each one appears on the site once it has a link.
   // WhatsApp: "https://wa.me/234XXXXXXXXXX" (number with country code, no +).
-  { id: "facebook", label: "Facebook", href: "" },
-  { id: "instagram", label: "Instagram", href: "" },
+  { id: "facebook", label: "Facebook", href: "https://www.facebook.com/profile.php?id=61595181771699" },
+  { id: "instagram", label: "Instagram", href: "https://www.instagram.com/codarc_ceo/" },
   { id: "discord", label: "Discord", href: "" },
-  { id: "whatsapp", label: "WhatsApp", href: "" },
+  { id: "whatsapp", label: "WhatsApp", href: "https://wa.me/2349078390089" }, // +234 907 839 0089
 ];
 
 /** Socials that have a link — the ones the site actually shows. */

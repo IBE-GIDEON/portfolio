@@ -38,6 +38,9 @@ test("contact and links", () => {
     "https://github.com/IBE-GIDEON",
     "https://www.linkedin.com/in/gideon-chinemerem-3037a43a3/",
     "https://x.com/Tech_zealot",
+    "https://www.facebook.com/profile.php?id=61595181771699",
+    "https://www.instagram.com/codarc_ceo/",
+    "https://wa.me/2349078390089",
   ]);
   for (const l of activeLinks) expect(l.href).toMatch(/^https:\/\//);
   for (const p of site.projects) {
