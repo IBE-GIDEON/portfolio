@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { firstName } from "@/content/derived";
 import { site } from "@/content/site";
 import { playWhoosh, unlockAudio } from "@/lib/sound";
 import { buttonStyles, feedback } from "@/ui/controls";
@@ -89,7 +90,7 @@ export function Contact() {
           className={`${field} block min-h-[220px] resize-none px-4 py-3.5 leading-[1.6]`}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder={"Hi Gideon,\n\nI'm working on…"}
+          placeholder={`Hi ${firstName(site.name)},\n\nI'm working on…`}
         />
       </form>
 

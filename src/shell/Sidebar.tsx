@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
+import { firstName } from "@/content/derived";
 import { site, type SectionId } from "@/content/site";
 import { feedback } from "@/ui/controls";
 import { LinkIcon } from "@/ui/icons";
@@ -56,7 +57,7 @@ export function Sidebar({ section, onGo, compact = false, onToggleCompact }: Sid
     >
       {/* Name + collapse */}
       <div className={`flex h-8 items-center ${compact ? "justify-center" : "justify-between pl-2.5"}`}>
-        {!compact && <span className="text-[16px] font-semibold tracking-[-0.02em] text-ink">Gideon</span>}
+        {!compact && <span className="text-[16px] font-semibold tracking-[-0.02em] text-ink">{firstName(site.name)}</span>}
         {onToggleCompact && (
           <IconButton label={compact ? "Expand sidebar" : "Collapse sidebar"} onClick={onToggleCompact}>
             <SidebarIcon />

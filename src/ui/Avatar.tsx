@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { initials } from "@/content/derived";
 import { site } from "@/content/site";
 
 /** Feathers a dark photo's edge into the black page instead of a hard circle. */
@@ -42,7 +43,7 @@ export function Avatar({
           className="grid h-full w-full place-items-center rounded-full bg-gradient-to-b from-[#FFFFFF] to-[#C7C7CC] font-semibold tracking-[-0.02em] text-[#0A0A0A] shadow-[inset_0_1px_0_rgb(255_255_255/0.6),0_2px_8px_rgb(0_0_0/0.5)]"
           style={{ fontSize: size * 0.36 }}
         >
-          GI
+          {initials(site.name)}
         </span>
       )}
       {online && (

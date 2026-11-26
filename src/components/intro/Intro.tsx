@@ -2,12 +2,14 @@
 
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { introName } from "@/content/derived";
+import { site } from "@/content/site";
 import { tap } from "@/lib/haptics";
 import { playKey, playWhoosh, unlockAudio } from "@/lib/sound";
 import { Flight } from "./Flight";
 import { landingPath, takeoffPath, type Point } from "./paths";
 
-const NAME = "GIDEON DA CRITIC";
+const NAME = introName(site.alias);
 const START_DELAY_MS = 350;
 const TAKEOFF_S = 1.3;
 const LANDING_S = 1.5;
@@ -171,7 +173,7 @@ export function Intro({ onLeave }: { onLeave?: () => void }) {
     >
       <div className="absolute inset-0 flex items-center justify-center px-6">
         <h1
-          aria-label="Gideon Da Critic"
+          aria-label={site.alias}
           className="relative whitespace-nowrap font-sans text-[clamp(1.75rem,7.5vw,6rem)] font-bold leading-none tracking-[-0.025em] text-ink"
         >
           {/* Full name, invisible, reserves the width so typing never shifts. */}

@@ -4,7 +4,7 @@ import { loadContent } from "@/content/load";
 import "./globals.css";
 
 // Checks src/content/site.json while the site is built: broken content fails the build.
-loadContent();
+const content = loadContent();
 
 /*
  * The Mac font (SF Pro) can't be shipped as a web font under Apple's licence,
@@ -24,9 +24,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gideon Ibe — Full-Stack & AI Engineer",
-  description:
-    "Full-stack engineer and AI builder based in Port Harcourt, working globally.",
+  title: content.seo.title,
+  description: content.seo.description,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

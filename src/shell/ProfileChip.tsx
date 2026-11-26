@@ -172,7 +172,7 @@ export function ProfileChip({ compact }: { compact: boolean }) {
           <>
             <span className="min-w-0 flex-1">
               <span className="block truncate text-[13px] font-semibold text-white">{site.name}</span>
-              <span className="block truncate text-[11px] text-muted">Full-stack &amp; AI</span>
+              <span className="block truncate text-[11px] text-muted">{site.shortRole}</span>
             </span>
             <span className="text-muted">
               <ChevronUpDown size={13} />
