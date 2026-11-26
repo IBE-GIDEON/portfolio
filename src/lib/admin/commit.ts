@@ -24,7 +24,36 @@ export const MANIFEST_PATH = "src/content/projectImages.json";
 /** Only screenshots and profile photos are ever deleted by the admin. */
 const DELETABLE = /^\/(projects\/[\w.-]+|me(\.[\w-]+)?)\.webp$/;
 
-const toJson = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
+/** How uploads are named: "/projects/<id>.<hash6>.webp" or "/me.<hash6>.webp". */
+const HELD_PATH = /^\/(projects\/[a-z0-9-]+|me)\.[a-f0-9]{6}\.webp$/;
+const BLUR = /^data:image\/webp;base64,[A-Za-z0-9+/=]{1,4000}$/;
+const MAX_HELD_IMAGES = 40;
+const MAX_IMAGE_BYTES = 1_500_000;
+
+const isWebp = (bytes: Buffer) =>
+  bytes.length > 12 && bytes.toString("latin1", 0, 4) === "RIFF" && bytes.toString("latin1", 8, 12) === "WEBP";
+
+/** Checks the uploads the browser sends back with a publish: names, sizes, and that each is really WebP. */
+export function checkHeldImages(input: unknown): { ok: true; images: HeldImage[] } | { ok: false; message: string } {
+  if (input === undefined) return { ok: true, images: [] };
+  if (!Array.isArray(input) || input.length > MAX_HELD_IMAGES) return { ok: false, message: "Too many images" };
+  const images: HeldImage[] = [];
+  for (const item of input) {
+    const { path, webpBase64, blur, projectId } = (item ?? {}) as Record<string, unknown>;
+    if (typeof path !== "string" || !HELD_PATH.test(path)) return { ok: false, message: "An image has an unexpected name" };
+    if (typeof webpBase64 !== "string") return { ok: false, message: `${path} has no data` };
+    const bytes = Buffer.from(webpBase64, "base64");
+    if (bytes.length > MAX_IMAGE_BYTES || !isWebp(bytes)) return { ok: false, message: `${path} isn't a WebP image` };
+    if (blur !== undefined && (typeof blur !== "string" || !BLUR.test(blur)))
+      return { ok: false, message: `${path} has a bad preview` };
+    if (projectId !== undefined && (typeof projectId !== "string" || !/^[a-z0-9-]+$/.test(projectId)))
+      return { ok: false, message: `${path} has a bad project id` };
+    images.push({ path, webpBase64, ...(blur ? { blur } : {}), ...(projectId ? { projectId } : {}) });
+  }
+  return { ok: true, images };
+}
+
+export const toJson = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
 const repoPath = (sitePath: string) => `public${sitePath}`;
 
 function imagesUsed(content: SiteContent): Set<string> {
