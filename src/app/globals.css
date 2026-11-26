@@ -44,53 +44,6 @@
     0 0 0 0.5px rgb(0 0 0 / 0.6);
 }
 
-/*
- * Rainbow glow for the selected sidebar item (Apple Intelligence–style).
- * The angle is animated so the colours travel slowly around the edge.
- */
-@property --glow-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes glow-spin {
-  to {
-    --glow-angle: 360deg;
-  }
-}
-
-@utility rainbow {
-  background: conic-gradient(
-    from var(--glow-angle),
-    #ff375f,
-    #ff9f0a,
-    #ffd60a,
-    #30d158,
-    #64d2ff,
-    #0a84ff,
-    #bf5af2,
-    #ff375f
-  );
-  animation: glow-spin 5s linear infinite;
-}
-
-/* Just the 1px edge of an element, filled with whatever background it has. */
-@utility edge-only {
-  padding: 1px;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rainbow {
-    animation: none;
-  }
-}
-
 /* One fixed screen: the page never scrolls, navigation swaps what's shown. */
 html,
 body {

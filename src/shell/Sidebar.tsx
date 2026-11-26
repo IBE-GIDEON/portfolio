@@ -85,19 +85,13 @@ export function Sidebar({ section, onGo, compact = false, onToggleCompact }: Sid
               } ${active ? "text-white" : "text-muted hover:bg-white/[0.06] hover:text-white"}`}
             >
               {active && (
+                // A plain grey selection, like the macOS sidebar; it slides between items.
                 <motion.span
                   layoutId="nav-active"
                   aria-hidden
-                  className="absolute inset-0 rounded-[10px]"
+                  className="absolute inset-0 rounded-[10px] bg-white/[0.11] shadow-[inset_0_1px_0_rgb(255_255_255/0.08)]"
                   transition={{ type: "spring", stiffness: 500, damping: 40 }}
-                >
-                  {/* soft rainbow glow behind */}
-                  <span className="rainbow absolute -inset-[2px] rounded-[12px] opacity-55 blur-[7px]" />
-                  {/* crisp rainbow edge */}
-                  <span className="rainbow edge-only absolute inset-0 rounded-[10px] opacity-90" />
-                  {/* frosted glass body */}
-                  <span className="absolute inset-px rounded-[9px] bg-[rgb(18_18_18/0.72)] shadow-[inset_0_1px_0_rgb(255_255_255/0.14)] backdrop-blur-xl" />
-                </motion.span>
+                />
               )}
               <span className={`relative ${active ? "text-white" : "text-muted"}`}>{ICONS[id]}</span>
               {!compact && <span className="relative">{SECTION_TITLES[id]}</span>}
