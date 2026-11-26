@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
+import { loadContent } from "@/content/load";
 import "./globals.css";
+
+// Checks src/content/site.json while the site is built: broken content fails the build.
+loadContent();
 
 /*
  * The Mac font (SF Pro) can't be shipped as a web font under Apple's licence,
