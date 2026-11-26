@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { validateContent, type SiteContent } from "@/content/schema";
 import { isAdminRequest, unauthorized } from "@/lib/admin/auth";
-import { buildCommit, checkHeldImages, CONTENT_PATH, MANIFEST_PATH, toJson, type Manifest } from "@/lib/admin/commit";
+import { buildCommit, checkHeldImages, CONTENT_PATH, MANIFEST_PATH, missingImages, toJson, type Manifest } from "@/lib/admin/commit";
 import { ConflictError, GitHubAuthError, GitHubError, type RepoClient } from "@/lib/admin/github";
 import { getRepoClient } from "@/lib/admin/repo";
 
@@ -68,8 +68,14 @@ export async function POST(request: Request) {
     const [file, manifest] = await Promise.all([repo.readFile(CONTENT_PATH), readManifest(repo)]);
     if (file.sha !== baseSha) return reply({ error: "conflict" }, 409);
 
+    const current = JSON.parse(file.text) as SiteContent;
+    if (missingImages(current, checked.content, held.images).length) {
+      const message = "A picture didn't finish uploading. Choose it again, then publish.";
+      return reply({ errors: [{ path: "images", message }] }, 422);
+    }
+
     const built = buildCommit({
-      current: { content: JSON.parse(file.text) as SiteContent, manifest },
+      current: { content: current, manifest },
       next: checked.content,
       images: held.images,
     });

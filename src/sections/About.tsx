@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { site } from "@/content/site";
+import { activeLinks, site } from "@/content/site";
 import type { SectionProps } from "@/shell/nav";
 import { Avatar } from "@/ui/Avatar";
 import { feedback } from "@/ui/controls";
@@ -53,7 +53,7 @@ const SKILL_TILES: Record<string, TileSpec> = {
 };
 
 function OverviewTab({ go }: SectionProps) {
-  const github = site.links.find((l) => l.id === "github");
+  const github = activeLinks.find((l) => l.id === "github");
   const [first, ...rest] = site.name.split(" ");
 
   return (

@@ -362,8 +362,16 @@ export function ListEditor<T>({
   invalidAt?: (index: number) => boolean;
   emptyText?: string;
 }) {
-  const [open, setOpen] = useState<number | null>(null);
-  const lastAdded = useRef<number | null>(null);
+  // Every row keeps a stable key, so a row's own state (an armed Remove, an
+  // upload in progress, half-typed text) stays with its item when others move or go.
+  const [rows, setRows] = useState(() => ({ keys: items.map((_, i) => i), next: items.length }));
+  let keys = rows.keys;
+  if (keys.length !== items.length) {
+    // The list changed from outside (Discard, Publish): start fresh keys.
+    keys = items.map((_, i) => rows.next + i);
+    setRows({ keys, next: rows.next + items.length });
+  }
+  const [openKey, setOpenKey] = useState<number | null>(null);
 
   const update = (index: number) => (fn: (item: T) => T | void) => {
     const copy = structuredClone(items[index]);
@@ -371,21 +379,24 @@ export function ListEditor<T>({
     next[index] = (fn(copy) ?? copy) as T;
     onChange(next);
   };
+  const reorder = <V,>(list: V[], from: number, to: number) => {
+    const next = [...list];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    return next;
+  };
   const move = (from: number, to: number) => {
-    const next = [...items];
-    const [item] = next.splice(from, 1);
-    next.splice(to, 0, item);
-    onChange(next);
-    setOpen((o) => (o === from ? to : o === to ? from : o));
+    setRows({ keys: reorder(keys, from, to), next: rows.next });
+    onChange(reorder(items, from, to));
   };
   const remove = (index: number) => {
+    setRows({ keys: keys.filter((_, i) => i !== index), next: rows.next });
     onChange(items.filter((_, i) => i !== index));
-    setOpen((o) => (o === null || o === index ? null : o > index ? o - 1 : o));
   };
   const add = () => {
+    setRows({ keys: [...keys, rows.next], next: rows.next + 1 });
+    if (expandable) setOpenKey(rows.next);
     onChange([...items, newItem()]);
-    lastAdded.current = items.length;
-    if (expandable) setOpen(items.length);
   };
 
   return (
@@ -393,13 +404,14 @@ export function ListEditor<T>({
       {items.length === 0 && <p className="px-3.5 py-3 text-[13px] text-muted">{emptyText}</p>}
       {items.map((item, index) => {
         const label = itemLabel(item, index) || "Untitled";
-        const isOpen = !expandable || open === index;
+        const key = keys[index];
+        const isOpen = !expandable || openKey === key;
         const bad = invalidAt?.(index);
         return (
-          <div key={index} className={expandable && isOpen ? "bg-white/[0.02]" : ""}>
+          <div key={key} className={expandable && isOpen ? "bg-white/[0.02]" : ""}>
             <div
               className={`flex items-center gap-2 px-3.5 py-2 ${expandable ? "cursor-pointer select-none hover:bg-white/[0.03]" : ""}`}
-              onClick={expandable ? () => setOpen(isOpen ? null : index) : undefined}
+              onClick={expandable ? () => setOpenKey(isOpen ? null : key) : undefined}
               role={expandable ? "button" : undefined}
               aria-expanded={expandable ? isOpen : undefined}
             >

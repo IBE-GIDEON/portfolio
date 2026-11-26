@@ -56,7 +56,12 @@ export const GITHUB_AUTH_MESSAGE = "GitHub rejected the access key. Check GITHUB
 
 export type UploadResult = { ok: true; image: HeldImage } | { ok: false; signedOut: boolean; message: string };
 
+/** The upload limit (the hosting refuses anything much bigger before it reaches the admin). */
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+const TOO_BIG = "That picture is over 4 MB. Try a smaller one (a screenshot or a resized photo).";
+
 export async function uploadImage(file: File, kind: "project" | "photo", projectId?: string): Promise<UploadResult> {
+  if (file.size > MAX_UPLOAD_BYTES) return { ok: false, signedOut: false, message: TOO_BIG };
   const form = new FormData();
   form.set("file", file);
   form.set("kind", kind);
@@ -64,6 +69,7 @@ export async function uploadImage(file: File, kind: "project" | "photo", project
   const { status, body } = await call("/api/admin/upload", { method: "POST", body: form });
   if (status === 200) return { ok: true, image: body as HeldImage };
   if (status === 401) return { ok: false, signedOut: true, message: "Signed out" };
+  if (status === 413) return { ok: false, signedOut: false, message: TOO_BIG };
   return { ok: false, signedOut: false, message: message(body, "That upload didn't work. Try another picture.") };
 }
 

@@ -5,6 +5,8 @@ import siteData from "@/content/site.json";
 import type { CommitInput, RepoClient } from "@/lib/admin/github";
 import { ConflictError, GitHubAuthError } from "@/lib/admin/github";
 import { setRepoClientForTests } from "@/lib/admin/repo";
+import { sessionKey } from "@/lib/admin/auth";
+import { adminConfig } from "@/lib/admin/config";
 import { SESSION_COOKIE, signSession } from "@/lib/admin/session";
 import { GET, POST } from "./route";
 
@@ -31,7 +33,7 @@ function fakeRepo(commitError?: Error) {
   return commits;
 }
 
-const cookie = () => `${SESSION_COOKIE}=${signSession(Date.now() + 60_000, SECRET)}`;
+const cookie = () => `${SESSION_COOKIE}=${signSession(Date.now() + 60_000, sessionKey(adminConfig()!))}`;
 
 const request = (method: string, body?: unknown, signedIn = true) =>
   new Request("http://localhost/api/admin/content", {
@@ -135,6 +137,17 @@ test("publishing commits site.json and new images, checked against the loaded sh
   const blob = Buffer.from(text, "utf8");
   const gitSha = createHash("sha1").update(`blob ${blob.length}\0`).update(blob).digest("hex");
   expect(body.sha).toBe(gitSha);
+});
+
+test("content pointing at a new picture that wasn't sent is refused, so the live site never shows a missing image", async () => {
+  const commits = fakeRepo();
+  const content = edited();
+  content.projects[0].image = "/projects/three-ai.abc123.webp";
+  const res = await POST(request("POST", { content, images: [], baseSha: "sha1" }));
+  expect(res.status).toBe(422);
+  const body = await res.json();
+  expect(body.errors[0].message).toMatch(/choose it again/i);
+  expect(commits).toEqual([]);
 });
 
 test("images with odd paths or that aren't WebP are refused", async () => {

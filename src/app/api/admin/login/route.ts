@@ -1,4 +1,4 @@
-import { notConfigured, sessionCookie } from "@/lib/admin/auth";
+import { notConfigured, sessionCookie, sessionKey } from "@/lib/admin/auth";
 import { adminConfig } from "@/lib/admin/config";
 import { passwordMatches, SESSION_MAX_AGE, signSession } from "@/lib/admin/session";
 
@@ -24,6 +24,6 @@ export async function POST(request: Request) {
     return Response.json({ error: "wrong-password" }, { status: 401 });
   }
 
-  const token = signSession(Date.now() + SESSION_MAX_AGE * 1000, config.secret);
+  const token = signSession(Date.now() + SESSION_MAX_AGE * 1000, sessionKey(config));
   return Response.json({ ok: true }, { headers: { "set-cookie": sessionCookie(token) } });
 }

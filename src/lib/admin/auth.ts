@@ -1,4 +1,5 @@
-import { adminConfig } from "./config";
+import { createHash } from "node:crypto";
+import { adminConfig, type AdminConfig } from "./config";
 import { SESSION_COOKIE, SESSION_MAX_AGE, verifySession } from "./session";
 
 /** The cookie only travels to the admin's own API. */
@@ -15,12 +16,20 @@ export function readCookie(request: Request, name: string): string | undefined {
   return undefined;
 }
 
+/**
+ * The key login cookies are signed with. It includes the password, so
+ * changing ADMIN_PASSWORD signs out every existing session.
+ */
+export function sessionKey(config: AdminConfig): string {
+  return `${config.secret}:${createHash("sha256").update(config.password).digest("hex")}`;
+}
+
 /** True when the request carries a valid admin login cookie. */
 export function isAdminRequest(request: Request): boolean {
   // Read the request first: it keeps GET handlers dynamic (never prerendered at build).
   const token = readCookie(request, SESSION_COOKIE);
   const config = adminConfig();
-  return config !== null && verifySession(token, config.secret);
+  return config !== null && verifySession(token, sessionKey(config));
 }
 
 const secure = () => (process.env.NODE_ENV === "production" ? "; Secure" : "");

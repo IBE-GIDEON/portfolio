@@ -1,5 +1,7 @@
 import sharp from "sharp";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { sessionKey } from "@/lib/admin/auth";
+import { adminConfig } from "@/lib/admin/config";
 import { SESSION_COOKIE, signSession } from "@/lib/admin/session";
 import { POST } from "./route";
 
@@ -13,7 +15,7 @@ async function upload(fields: { file?: Blob; kind?: string; projectId?: string }
   if (fields.kind) form.set("kind", fields.kind);
   if (fields.projectId) form.set("projectId", fields.projectId);
   const headers: Record<string, string> = signedIn
-    ? { cookie: `${SESSION_COOKIE}=${signSession(Date.now() + 60_000, SECRET)}` }
+    ? { cookie: `${SESSION_COOKIE}=${signSession(Date.now() + 60_000, sessionKey(adminConfig()!))}` }
     : {};
   return POST(new Request("http://localhost/api/admin/upload", { method: "POST", headers, body: form }));
 }

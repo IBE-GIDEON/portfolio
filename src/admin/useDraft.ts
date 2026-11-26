@@ -34,6 +34,25 @@ export function publishOutcome(status: number, body: unknown): PublishOutcome {
   return { kind: "error", message: b.message ?? `Something went wrong (error ${status}). Try again.` };
 }
 
+/** One held picture per project, plus the profile photo; a newer upload replaces the older one. */
+export function holdImage(images: HeldImage[], image: HeldImage): HeldImage[] {
+  const slot = (i: HeldImage) => (i.projectId ? `project:${i.projectId}` : "photo");
+  return [...images.filter((i) => slot(i) !== slot(image)), image];
+}
+
+/** After a publish: keep the uploads that weren't part of it (e.g. one that finished meanwhile). */
+export function unsentImages(images: HeldImage[], sent: HeldImage[]): HeldImage[] {
+  const paths = new Set(sent.map((i) => i.path));
+  return images.filter((i) => !paths.has(i.path));
+}
+
+/** Puts an uploaded screenshot on the current version of its project; false if the project is gone. */
+export function setProjectImage(draft: SiteContent, projectId: string, path: string): boolean {
+  const project = draft.projects.find((p) => p.id === projectId);
+  if (project) project.image = path;
+  return Boolean(project);
+}
+
 /** Which uploads the draft still uses (a replaced or removed picture is dropped). */
 function usedImages(draft: SiteContent, images: HeldImage[]): HeldImage[] {
   const used = new Set([draft.photo, ...draft.projects.map((p) => p.image)]);
@@ -58,7 +77,7 @@ export function useDraft(loaded: Loaded) {
 
   /** Holds an upload; a newer picture for the same project (or the photo) replaces the older one. */
   const addImage = useCallback((image: HeldImage) => {
-    setImages((current) => [...current.filter((i) => (i.projectId ?? "photo") !== (image.projectId ?? "photo")), image]);
+    setImages((current) => holdImage(current, image));
   }, []);
 
   const held = useMemo(() => usedImages(draft, images), [draft, images]);
@@ -85,7 +104,7 @@ export function useDraft(loaded: Loaded) {
       setBase((current) => ({ ...current, content: published, sha: outcome.sha }));
       // Keep anything typed while publishing; otherwise take the tidied, published copy.
       setDraftState((current) => (current === sent ? published : current));
-      setImages([]);
+      setImages((current) => unsentImages(current, held));
     }
     return outcome;
   }, [base.sha, held, draft]);

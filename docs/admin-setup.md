@@ -40,7 +40,7 @@ vercel.com → project **portfolio** → **Settings** → **Environment Variable
 
 | Name | Value |
 |---|---|
-| `ADMIN_PASSWORD` | Your admin password: **16 characters or more**, used nowhere else. |
+| `ADMIN_PASSWORD` | Your admin password: **16 characters or more**, used nowhere else. (Shorter ones are refused: the admin stays "not set up".) |
 | `ADMIN_SESSION_SECRET` | The line from step 2. |
 | `GITHUB_TOKEN` | The key from step 1. |
 
@@ -58,7 +58,7 @@ on GitHub.
 
 - **Pictures:** JPG, PNG or WebP up to 4 MB. Screenshots are cropped to 16:10 from the top; your
   photo is cropped square around your face. They're saved together with your other edits when you
-  press Publish (not when you choose them).
+  press Publish (not when you choose them). Bigger phone photos: resize or screenshot them first.
 - **If a publish has a mistake** (a missing field, a link without `https://`), nothing is saved and
   the admin shows what to fix.
 - **If the build fails** for any reason, Vercel keeps the previous version online.
@@ -67,7 +67,8 @@ on GitHub.
 
 - **Sign-in lasts 7 days** on that browser. To sign out everywhere, change `ADMIN_SESSION_SECRET` in
   Vercel and redeploy.
-- **Change your password:** change `ADMIN_PASSWORD` in Vercel and redeploy.
+- **Change your password:** change `ADMIN_PASSWORD` in Vercel and redeploy. This also signs out every
+  browser that was signed in with the old password.
 - **Wrong passwords** wait one second each; there's no lockout (no database), which is why the password
   must be long.
 - **"The site changed since you opened it"** means someone (another tab, or a code push) changed the

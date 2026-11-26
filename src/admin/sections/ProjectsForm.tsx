@@ -4,6 +4,7 @@ import { useState } from "react";
 import { SECTION_IDS, type Project, type SectionId } from "@/content/schema";
 import { errorAt, FormPage, hasErrorsUnder, ImageRow, ListEditor, Row, Segmented, SelectRow, TagsRow, TextAreaRow, TextRow } from "../fields";
 import { slugify, uniqueId } from "../slugify";
+import { setProjectImage } from "../useDraft";
 import type { FormProps } from "./types";
 
 const STATUS = [
@@ -21,10 +22,10 @@ const OPENS: { value: SectionId; label: string }[] = SECTION_IDS.map((id) => ({
   label: `${id[0].toUpperCase()}${id.slice(1)} page`,
 }));
 
-function Screenshot({ project, index, upload, preview, update, error }: {
+function Screenshot({ project, upload, preview, setDraft, update, error }: {
   project: Project;
-  index: number;
   upload: FormProps["upload"];
+  setDraft: FormProps["setDraft"];
   preview: FormProps["preview"];
   update: (fn: (p: Project) => void) => void;
   error?: string;
@@ -41,14 +42,16 @@ function Screenshot({ project, index, upload, preview, update, error }: {
       hint="A full-width shot of the homepage. It's cropped to 16:10 from the top."
       onRemove={() => update((p) => void delete p.image)}
       onPick={async (file) => {
+        const projectId = project.id;
         setBusy(true);
         setUploadError(undefined);
-        const result = await upload(file, "project", project.id);
+        const result = await upload(file, "project", projectId);
         setBusy(false);
-        if (result.ok) update((p) => void (p.image = result.image.path));
-        else setUploadError(result.message);
+        if (!result.ok) return setUploadError(result.message);
+        // Apply to the draft as it is now, so edits made during the upload are kept
+        // (if the project was removed meanwhile, the picture is simply not used).
+        setDraft((d) => void setProjectImage(d, projectId, result.image.path));
       }}
-      key={index}
     />
   );
 }
@@ -135,7 +138,7 @@ export function ProjectsForm({ draft, setDraft, errors, upload, preview, isNewPr
                   onChange={(v) => update((x) => void (x.action = { label: "Inquire", opens: v }))}
                 />
               )}
-              <Screenshot project={p} index={i} upload={upload} preview={preview} update={update} error={at("image")} />
+              <Screenshot project={p} upload={upload} preview={preview} setDraft={setDraft} update={update} error={at("image")} />
             </div>
           );
         }}

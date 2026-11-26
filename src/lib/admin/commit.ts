@@ -81,6 +81,16 @@ function nextManifest(current: Manifest, next: SiteContent, held: Map<string, He
   return Object.fromEntries(order.map((id) => [id, wanted.get(id)!]));
 }
 
+/**
+ * Pictures the new content points at that would not exist after the commit:
+ * not uploaded with this publish and not already in use. Publishing those
+ * would show a broken image on the live site.
+ */
+export function missingImages(current: SiteContent, next: SiteContent, images: HeldImage[]): string[] {
+  const available = new Set([...imagesUsed(current), ...images.map((i) => i.path)]);
+  return [...imagesUsed(next)].filter((path) => !available.has(path));
+}
+
 export function buildCommit(args: {
   current: { content: SiteContent; manifest: Manifest };
   next: SiteContent;

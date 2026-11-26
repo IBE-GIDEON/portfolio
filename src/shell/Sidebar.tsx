@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
 import { firstName } from "@/content/derived";
-import { site, type SectionId } from "@/content/site";
+import { activeLinks, site, type SectionId } from "@/content/site";
 import { feedback } from "@/ui/controls";
 import { LinkIcon } from "@/ui/icons";
 import { BriefcaseIcon, FolderIcon, MailIcon, OverviewIcon, SidebarIcon, UserIcon } from "@/ui/lineIcons";
@@ -115,9 +115,9 @@ export function Sidebar({ section, onGo, compact = false, onToggleCompact }: Sid
       </nav>
 
       {/* Socials */}
-      {!compact && <Label>Socials</Label>}
+      {!compact && activeLinks.length > 0 && <Label>Socials</Label>}
       <ul className={`space-y-0.5 ${compact ? "mt-5 border-t border-white/[0.07] pt-4" : ""}`}>
-        {site.links.map((l) => {
+        {activeLinks.map((l) => {
           const row = `flex h-8 items-center gap-2.5 rounded-lg text-[13px] text-muted ${compact ? "justify-center" : "px-2.5"}`;
           const inner = (
             <>
@@ -129,24 +129,17 @@ export function Sidebar({ section, onGo, compact = false, onToggleCompact }: Sid
           );
           return (
             <li key={l.id}>
-              {l.href ? (
-                <a
-                  href={l.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={compact ? l.label : undefined}
-                  title={compact ? l.label : undefined}
-                  onClick={feedback}
-                  className={`${row} transition-colors hover:bg-white/[0.06] hover:text-white`}
-                >
-                  {inner}
-                </a>
-              ) : (
-                // No link yet: shown, but dimmed and not clickable.
-                <span title={`${l.label} — link coming soon`} className={`${row} cursor-default opacity-50`}>
-                  {inner}
-                </span>
-              )}
+              <a
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={compact ? l.label : undefined}
+                title={compact ? l.label : undefined}
+                onClick={feedback}
+                className={`${row} transition-colors hover:bg-white/[0.06] hover:text-white`}
+              >
+                {inner}
+              </a>
             </li>
           );
         })}

@@ -52,6 +52,22 @@ test("a short session secret counts as not configured", async () => {
   expect(res.status).toBe(503);
 });
 
+test("a password under 16 characters counts as not configured", async () => {
+  configure();
+  vi.stubEnv("ADMIN_PASSWORD", "short-password1");
+  const res = await settle(login(post({ password: "short-password1" })));
+  expect(res.status).toBe(503);
+});
+
+test("changing the password signs out every existing session", async () => {
+  configure();
+  const res = await login(post({ password: PASSWORD }));
+  const token = (res.headers.get("set-cookie") ?? "").split(";")[0];
+  vi.stubEnv("ADMIN_PASSWORD", "a brand new long password");
+  const s = await session(new Request("http://localhost/api/admin/session", { headers: { cookie: token } }));
+  expect(await s.json()).toEqual({ configured: true, signedIn: false });
+});
+
 test("the right password signs in with a locked-down cookie", async () => {
   configure();
   const res = await login(post({ password: PASSWORD }));

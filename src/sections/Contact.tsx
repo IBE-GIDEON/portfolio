@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { firstName } from "@/content/derived";
-import { site } from "@/content/site";
+import { activeLinks, site } from "@/content/site";
 import { playWhoosh, unlockAudio } from "@/lib/sound";
 import { buttonStyles, feedback } from "@/ui/controls";
 import { LinkIcon, PlaneGlyph } from "@/ui/icons";
@@ -95,8 +95,8 @@ export function Contact() {
       </form>
 
       <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-muted">
-        <span>Elsewhere:</span>
-        {site.links.map((l) => {
+        {activeLinks.length > 0 && <span>Elsewhere:</span>}
+        {activeLinks.map((l) => {
           const inner = (
             <>
               <span className="h-4 w-4">
@@ -105,7 +105,7 @@ export function Contact() {
               {l.label}
             </>
           );
-          return l.href ? (
+          return (
             <a
               key={l.id}
               href={l.href}
@@ -116,10 +116,6 @@ export function Contact() {
             >
               {inner}
             </a>
-          ) : (
-            <span key={l.id} title={`${l.label} — link coming soon`} className="flex cursor-default items-center gap-2 opacity-50">
-              {inner}
-            </span>
           );
         })}
       </div>
