@@ -119,12 +119,15 @@ function StoryTab() {
   );
 }
 
+/** For skill groups added from the admin that have no icon of their own. */
+const OTHER_SKILLS: TileSpec = { color: "#8E8E93", glyph: <path d="M12 4.5l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5L4.8 9.8l5-.7z" /> };
+
 function SkillsTab() {
   return (
     <div className="px-5 py-6 md:px-8 md:py-8">
       <Group>
         {site.stack.map((g) => (
-          <Row key={g.group} tile={SKILL_TILES[g.group]} label={g.group}>
+          <Row key={g.group} tile={SKILL_TILES[g.group] ?? OTHER_SKILLS} label={g.group}>
             <span className="text-white/70">{g.items.join(", ")}</span>
           </Row>
         ))}
